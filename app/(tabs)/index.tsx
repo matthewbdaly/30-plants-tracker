@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ content, index, onDelete }: { content: string , index: number, onDelete: Function }) => (
+const Item = ({ content, index, onDelete }: { content: string, index: number, onDelete: (index: number) => void }) => (
   <View>
     <Text>{content}</Text>
-    <Button title="Delete" onPress={onDelete} />
+    <Button title="Delete" onPress={() => onDelete(index)} />
   </View>
 );
 
@@ -59,41 +59,33 @@ export default function Index() {
     }
   };
 
+  const deleteItem = (index: number) => {
+    dispatch({ type: "DELETE_ITEM", index });
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        style={styles.modalContent}
-      >
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Button title="Add Item" onPress={openNewItemModal} />
+      <FlatList
+        data={items}
+        renderItem={({ item, index }) => (
+          <Item content={item} index={index} onDelete={deleteItem} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <Modal visible={modalVisible} animationType="slide">
         <View style={styles.modalContent}>
           <TextInput
             placeholder="Enter new item"
             value={newItem}
             onChangeText={setNewItem}
           />
-          <Button onPress={addItem} title="Add" />
-          <Pressable
-            onPress={() => setModalVisible(false)}
-            style={styles.cancelButton}
-          >
-            <Text style={{ color: "white" }}>&times;</Text>
+          <Button title="Add" onPress={addItem} />
+          <Pressable style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+            <Text style={{ color: "white" }}>Cancel</Text>
           </Pressable>
         </View>
       </Modal>
-      <Text>Add the plants you've eaten this week.</Text>
-      <FlatList
-        data={items}
-        renderItem={({ item, index }) => <Item content={item} index={index} onDelete={() => dispatch({ type: "DELETE_ITEM", index })} />}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      <Button onPress={openNewItemModal} title="Add new item" />
     </View>
   );
 }
