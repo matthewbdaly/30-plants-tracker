@@ -1,23 +1,9 @@
 import { useState, useReducer } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
-import { Pressable, TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
+import Item from '@/app/components/Item';
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  itemText: {
-    flex: 1,
-  },
-  deleteButton: {
-    marginLeft: 10,
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -34,15 +20,6 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
   },
 });
-
-const Item = ({ content, index, onDelete }: { content: string, index: number, onDelete: (index: number) => void }) => (
-  <View style={styles.itemContainer}>
-    <Text style={styles.itemText}>{content}</Text>
-    <Pressable onPress={() => onDelete(index)} style={styles.deleteButton}>
-      <Text>&times;</Text>
-    </Pressable>
-  </View>
-);
 
 type ActionType = { type: "ADD_ITEM"; payload: string } 
 | { type: "RESET_ITEMS" } 
@@ -78,14 +55,6 @@ export default function Index() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%" }}>
-      <FlatList
-        style={{ width: "100%" }}
-        data={items}
-        renderItem={({ item, index }) => (
-          <Item content={item} index={index} onDelete={deleteItem} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Enter new item"
@@ -95,6 +64,14 @@ export default function Index() {
         />
         <Button title="Add" onPress={addItem} />
       </View>
+      <FlatList
+        style={{ width: "100%" }}
+        data={items}
+        renderItem={({ item, index }) => (
+          <Item content={item} index={index} onDelete={deleteItem} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </View>
   );
 }
