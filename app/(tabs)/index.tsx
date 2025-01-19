@@ -18,13 +18,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const Item = ({ content }: { content: string }) => (
+const Item = ({ content, index, onDelete }: { content: string , index: number, onDelete: Function }) => (
   <View>
     <Text>{content}</Text>
+    <Button title="Delete" onPress={onDelete} />
   </View>
 );
 
-type ActionType = { type: "ADD_ITEM"; payload: string } | { type: "RESET_ITEMS" };
+type ActionType = { type: "ADD_ITEM"; payload: string } 
+| { type: "RESET_ITEMS" } 
+| { type: "DELETE_ITEM"; index: number };
 
 const itemsReducer = (state: string[], action: ActionType): string[] => {
   switch (action.type) {
@@ -32,6 +35,8 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
       return [...state, action.payload];
     case "RESET_ITEMS":
       return [];
+    case "DELETE_ITEM":
+      return state.filter((_, index) => index !== action.index);
     default:
       return state;
   }
@@ -85,7 +90,7 @@ export default function Index() {
       <Text>Add the plants you've eaten this week.</Text>
       <FlatList
         data={items}
-        renderItem={({ item }) => <Item content={item} />}
+        renderItem={({ item, index }) => <Item content={item} index={index} onDelete={() => dispatch({ type: "DELETE_ITEM", index })} />}
         keyExtractor={(item, index) => index.toString()}
       />
       <Button onPress={openNewItemModal} title="Add new item" />
