@@ -15,14 +15,18 @@ const styles = StyleSheet.create({
   itemText: {
     flex: 1,
   },
+  darkItemText: {
+    flex: 1,
+    color: "#fff",
+  },
   deleteButton: {
     marginLeft: 10,
   },
 });
 
-const Item = ({ content, index, onDelete }: { content: string, index: number, onDelete: (index: number) => void }) => (
+const Item = ({ content, darkMode, index, onDelete }: { content: string, darkMode: boolean, index: number, onDelete: (index: number) => void }) => (
   <View style={styles.itemContainer}>
-    <Text style={styles.itemText}>{content}</Text>
+    <Text style={darkMode ? styles.darkItemText : styles.itemText}>{content}</Text>
     <Pressable onPress={() => onDelete(index)} style={styles.deleteButton}>
       <Text>&times;</Text>
     </Pressable>

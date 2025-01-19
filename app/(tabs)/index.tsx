@@ -1,5 +1,5 @@
 import { useState, useReducer, useEffect, useRef } from "react";
-import { Alert, Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
+import { Alert, Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput, useColorScheme } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from '@/components/Item';
@@ -43,6 +43,7 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
 };
 
 export default function Index() {
+  const colourScheme = useColorScheme();
   const [newItem, setNewItem] = useState<string>("");
   const [items, dispatch] = useReducer(itemsReducer, []);
   const textInputRef = useRef<RNTextInput>(null);
@@ -106,7 +107,7 @@ export default function Index() {
         style={{ width: "100%" }}
         data={[...items].sort()}
         renderItem={({ item, index }) => (
-          <Item content={item} index={index} onDelete={deleteItem} />
+          <Item content={item} darkMode={colourScheme === "dark"} index={index} onDelete={deleteItem} />
         )}
         keyExtractor={(item, index) => index.toString()}
       />
