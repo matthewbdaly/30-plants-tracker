@@ -16,12 +16,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  itemText: {
+    flex: 1,
+  },
+  deleteButton: {
+    marginLeft: 10,
+  },
 });
 
 const Item = ({ content, index, onDelete }: { content: string, index: number, onDelete: (index: number) => void }) => (
-  <View>
-    <Text>{content}</Text>
-    <Button title="Delete" onPress={() => onDelete(index)} />
+  <View style={styles.itemContainer}>
+    <Text style={styles.itemText}>{content}</Text>
+    <Pressable onPress={() => onDelete(index)} style={styles.deleteButton}>
+      <Text>&times;</Text>
+    </Pressable>
   </View>
 );
 
@@ -64,9 +81,10 @@ export default function Index() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%" }}>
       <Button title="Add Item" onPress={openNewItemModal} />
       <FlatList
+        style={{ width: "100%" }}
         data={items}
         renderItem={({ item, index }) => (
           <Item content={item} index={index} onDelete={deleteItem} />
@@ -79,6 +97,7 @@ export default function Index() {
             placeholder="Enter new item"
             value={newItem}
             onChangeText={setNewItem}
+            style={{ borderWidth: 1, padding: 10, width: "80%" }}
           />
           <Button title="Add" onPress={addItem} />
           <Pressable style={styles.cancelButton} onPress={() => setModalVisible(false)}>
