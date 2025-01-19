@@ -1,6 +1,7 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useEffect } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from '@/app/components/Item';
 
 const styles = StyleSheet.create({
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
 
 type ActionType = { type: "ADD_ITEM"; payload: string } 
 | { type: "RESET_ITEMS" } 
-| { type: "DELETE_ITEM"; index: number };
+| { type: "DELETE_ITEM"; index: number }
+| { type: "SET_ITEMS"; payload: string[] };
 
 const itemsReducer = (state: string[], action: ActionType): string[] => {
   switch (action.type) {
@@ -33,6 +35,8 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
       return [];
     case "DELETE_ITEM":
       return state.filter((_, index) => index !== action.index);
+    case "SET_ITEMS":
+      return action.payload;
     default:
       return state;
   }
@@ -41,6 +45,33 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
 export default function Index() {
   const [newItem, setNewItem] = useState<string>("");
   const [items, dispatch] = useReducer(itemsReducer, []);
+
+  useEffect(() => {
+    const loadItems = async () => {
+      try {
+        const storedItems = await AsyncStorage.getItem('items');
+        if (storedItems) {
+          dispatch({ type: "SET_ITEMS", payload: JSON.parse(storedItems) });
+        }
+      } catch (error) {
+        console.error("Failed to load items from storage", error);
+      }
+    };
+
+    loadItems();
+  }, []);
+
+  useEffect(() => {
+    const saveItems = async () => {
+      try {
+        await AsyncStorage.setItem('items', JSON.stringify(items));
+      } catch (error) {
+        console.error("Failed to save items to storage", error);
+      }
+    };
+
+    saveItems();
+  }, [items]);
 
   const addItem = () => {
     if (newItem.trim()) {
