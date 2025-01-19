@@ -1,21 +1,8 @@
 import { useState, useReducer } from "react";
-import { Button, FlatList, Modal, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { Pressable, TextInput } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
-  cancelButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: "red",
-  },
-  modalContent: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   itemContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -30,6 +17,21 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     marginLeft: 10,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    width: "100%",
+  },
+  textInput: {
+    borderWidth: 1,
+    padding: 10,
+    flex: 1,
+    marginRight: 10,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderColor: "#ccc",
   },
 });
 
@@ -60,19 +62,13 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
 };
 
 export default function Index() {
-  const [modalVisible, setModalVisible] = useState(false);
   const [newItem, setNewItem] = useState<string>("");
   const [items, dispatch] = useReducer(itemsReducer, []);
-
-  const openNewItemModal = () => {
-    setModalVisible(true);
-  };
 
   const addItem = () => {
     if (newItem.trim()) {
       dispatch({ type: "ADD_ITEM", payload: newItem });
       setNewItem("");
-      setModalVisible(false);
     }
   };
 
@@ -82,7 +78,6 @@ export default function Index() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%" }}>
-      <Button title="Add Item" onPress={openNewItemModal} />
       <FlatList
         style={{ width: "100%" }}
         data={items}
@@ -91,20 +86,15 @@ export default function Index() {
         )}
         keyExtractor={(item, index) => index.toString()}
       />
-      <Modal visible={modalVisible} animationType="slide">
-        <View style={styles.modalContent}>
-          <TextInput
-            placeholder="Enter new item"
-            value={newItem}
-            onChangeText={setNewItem}
-            style={{ borderWidth: 1, padding: 10, width: "80%" }}
-          />
-          <Button title="Add" onPress={addItem} />
-          <Pressable style={styles.cancelButton} onPress={() => setModalVisible(false)}>
-            <Text style={{ color: "white" }}>Cancel</Text>
-          </Pressable>
-        </View>
-      </Modal>
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Enter new item"
+          value={newItem}
+          onChangeText={setNewItem}
+          style={styles.textInput}
+        />
+        <Button title="Add" onPress={addItem} />
+      </View>
     </View>
   );
 }
