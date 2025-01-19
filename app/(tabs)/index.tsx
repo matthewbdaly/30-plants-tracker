@@ -2,7 +2,7 @@ import { useState, useReducer, useEffect, useRef } from "react";
 import { Alert, Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Item from '@/app/components/Item';
+import Item from '@/components/Item';
 
 const styles = StyleSheet.create({
   inputContainer: {
