@@ -28,7 +28,7 @@ const Item = ({ content, darkMode, index, onDelete }: { content: string, darkMod
   <View style={styles.itemContainer}>
     <Text style={darkMode ? styles.darkItemText : styles.itemText}>{content}</Text>
     <Pressable onPress={() => onDelete(index)} style={styles.deleteButton}>
-      <Text>&times;</Text>
+      <Text style={darkMode ? styles.darkItemText : styles.itemText}>&times;</Text>
     </Pressable>
   </View>
 );
