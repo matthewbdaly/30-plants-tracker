@@ -91,6 +91,11 @@ export default function Index() {
     dispatch({ type: "DELETE_ITEM", index });
   };
 
+  const clearList = () => {
+    dispatch({ type: "RESET_ITEMS" });
+    AsyncStorage.setItem('items', JSON.stringify([]));
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%" }}>
       <View style={styles.inputContainer}>
@@ -103,6 +108,7 @@ export default function Index() {
         />
         <Button title="Add" onPress={addItem} />
       </View>
+      <Button title="Clear List" onPress={clearList} />
       <FlatList
         style={{ width: "100%" }}
         data={[...items].sort()}
