@@ -1,5 +1,5 @@
 import { useState, useReducer, useEffect, useRef } from "react";
-import { Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
+import { Alert, Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from '@/app/components/Item';
@@ -76,9 +76,13 @@ export default function Index() {
 
   const addItem = () => {
     if (newItem.trim()) {
-      dispatch({ type: "ADD_ITEM", payload: newItem });
-      setNewItem("");
-      textInputRef.current?.focus();
+      if (items.includes(newItem)) {
+        Alert.alert("Duplicate Item", "This item already exists.");
+      } else {
+        dispatch({ type: "ADD_ITEM", payload: newItem });
+        setNewItem("");
+        textInputRef.current?.focus();
+      }
     }
   };
 
