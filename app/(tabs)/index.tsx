@@ -1,5 +1,5 @@
-import { useState, useReducer, useEffect } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { useState, useReducer, useEffect, useRef } from "react";
+import { Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from '@/app/components/Item';
@@ -45,6 +45,7 @@ const itemsReducer = (state: string[], action: ActionType): string[] => {
 export default function Index() {
   const [newItem, setNewItem] = useState<string>("");
   const [items, dispatch] = useReducer(itemsReducer, []);
+  const textInputRef = useRef<RNTextInput>(null);
 
   useEffect(() => {
     const loadItems = async () => {
@@ -77,6 +78,7 @@ export default function Index() {
     if (newItem.trim()) {
       dispatch({ type: "ADD_ITEM", payload: newItem });
       setNewItem("");
+      textInputRef.current?.focus();
     }
   };
 
@@ -88,6 +90,7 @@ export default function Index() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", width: "100%" }}>
       <View style={styles.inputContainer}>
         <TextInput
+          ref={textInputRef}
           placeholder="Enter new item"
           value={newItem}
           onChangeText={setNewItem}
@@ -97,7 +100,7 @@ export default function Index() {
       </View>
       <FlatList
         style={{ width: "100%" }}
-        data={items}
+        data={[...items].sort()}
         renderItem={({ item, index }) => (
           <Item content={item} index={index} onDelete={deleteItem} />
         )}
