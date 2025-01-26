@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
   },
 });
 
-type ActionType = { type: "ADD_ITEM"; payload: string } 
-| { type: "RESET_ITEMS" } 
-| { type: "DELETE_ITEM"; index: number }
-| { type: "SET_ITEMS"; payload: string[] };
+type ActionType = { type: "ADD_ITEM"; payload: string }
+  | { type: "RESET_ITEMS" }
+  | { type: "DELETE_ITEM"; index: number }
+  | { type: "SET_ITEMS"; payload: string[] };
 
 const itemsReducer = (state: string[], action: ActionType): string[] => {
   switch (action.type) {
@@ -104,6 +104,7 @@ export default function Index() {
           placeholder="Enter new item"
           value={newItem}
           onChangeText={setNewItem}
+          onSubmitEditing={addItem}
           style={styles.textInput}
         />
         <Button title="Add" onPress={addItem} />
