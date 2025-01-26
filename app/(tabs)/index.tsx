@@ -30,13 +30,13 @@ type ActionType = { type: "ADD_ITEM"; payload: string }
 const itemsReducer = (state: string[], action: ActionType): string[] => {
   switch (action.type) {
     case "ADD_ITEM":
-      return [...state, action.payload];
+      return [...state, action.payload].sort();
     case "RESET_ITEMS":
       return [];
     case "DELETE_ITEM":
       return state.filter((_, index) => index !== action.index);
     case "SET_ITEMS":
-      return action.payload;
+      return action.payload.sort();
     default:
       return state;
   }
@@ -79,6 +79,7 @@ export default function Index() {
     if (newItem.trim()) {
       if (items.includes(newItem)) {
         Alert.alert("Duplicate Item", "This item already exists.");
+        setNewItem("");
       } else {
         dispatch({ type: "ADD_ITEM", payload: newItem });
         setNewItem("");
