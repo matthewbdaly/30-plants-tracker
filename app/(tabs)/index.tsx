@@ -1,5 +1,5 @@
 import { useState, useReducer, useEffect, useRef } from "react";
-import { Alert, Button, FlatList, StyleSheet, Text, View, TextInput as RNTextInput, useColorScheme } from "react-native";
+import { Alert, Button, FlatList, StyleSheet, View, TextInput as RNTextInput, useColorScheme } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Item from '@/components/Item';
@@ -108,7 +108,7 @@ export default function Index() {
           onSubmitEditing={addItem}
           style={styles.textInput}
         />
-        <Button title="Add" onPress={addItem} />
+        <Button title={`Add - ${items.length} items`} onPress={addItem} />
       </View>
       <Button title="Clear List" onPress={clearList} />
       <FlatList
