@@ -93,6 +93,9 @@ export default function Index() {
   };
 
   const clearList = () => {
+    if (!window.confirm("Are you sure you want to reset your items?")) {
+      return;
+    }
     dispatch({ type: "RESET_ITEMS" });
     AsyncStorage.setItem('items', JSON.stringify([]));
   };
